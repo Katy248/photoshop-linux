@@ -11,3 +11,5 @@ fmt:
 		$(FORMAT_FLAGS) \
 		$(SOURCE_FILES)
 
+clear:
+	rm -f ./install_log.log ./Photoshop.tar.xz
