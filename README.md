@@ -43,11 +43,11 @@ Usage: ./install.sh [options...] <path>
 ## To Do
 
 - [ ] Properly implement logging
-- [ ] Multi distro dependencies installer (for now only Arch Linux is supported)
+- [ ] Multi distro dependencies installer (for now only `Arch Linux` and `RED OS 8.0` is supported)
 - [ ] Create universal functions for repetitive actions
 - [x] Implement colored logging in a different way, making the code more readable
 - [ ] Allow the user to use a different source to download Photoshop
-    - [ ] Allow the user to skip checksum verification of downloaded files
+    - [x] Allow the user to skip checksum verification of downloaded files
 - [ ] Uninstall script
 - [x] More checks in the install script
 - [x] Ability for the user to select a default installation folder
