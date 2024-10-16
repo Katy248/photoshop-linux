@@ -49,7 +49,7 @@ LOCAL_ARCHIVE=""
 ICON=""
 
 # Identifier of current OS
-OS_ID=$(./get-os-id.sh)
+OS_ID=$(bash -c 'source /etc/os-release && echo $ID')
 
 SKIP_CHECKSUM=0
 
