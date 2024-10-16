@@ -253,6 +253,8 @@ setup_wine() {
   fi
 }
 
+# $1 - checksum
+# $2 - file
 validate_checksum() {
   local checksum=$1
   local file=$2
@@ -260,14 +262,12 @@ validate_checksum() {
   if [[ ${SKIP_CHECKSUM} != 0  ]]; then
     return 0
   fi
-  echo -e "$LOG Comparing checksum of file '${file}' with checksum '${checksum}'"
 
   if ! echo "${checksum} ${file}" | sha256sum --check --status; then
     print_error "Checksums don't match"
     return 1
   fi
 
-  print_check "Checksums for '${file}' are valid"
   return 0
 }
 
@@ -427,7 +427,6 @@ install_desktop_entry() {
 }
 
 install_launcher() {
-
   mkdir -p "$HOME/.local/bin"
 
   print_log "Installing launcher."
