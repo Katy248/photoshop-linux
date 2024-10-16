@@ -428,12 +428,9 @@ install_icon() {
       exit 1
     fi
 
-    print_log "Changing '.webp' format to '.png'"
     magick "icon.webp" "icon.png"
-    print_log "Delete './icon.webp'"
     rm "./icon.webp"
 
-    print_log "Installing icon for .desktop entry."
     mv "./icon.png" "$XDG_DATA_HOME/icons/photoshop.png"
     ICON="$XDG_DATA_HOME/icons/photoshop.png"
   fi
@@ -444,7 +441,6 @@ install_icon() {
 
 install_desktop_entry() {
   mkdir "$XDG_DATA_HOME/applications" -p
-  print_log "Genarating application menu item"
   cp ./photoshop.desktop "${INSTALLED_DESKTOP_FILE}"
   echo "Exec=bash $HOME/.local/bin/photoshop.sh %F" >> "${INSTALLED_DESKTOP_FILE}"
 }
