@@ -225,9 +225,9 @@ setup_wine() {
   # echo -e "${LOG_NORMAL}[LOG]${LOG_RESET} Executing winetricks. All winetricks logs are saved in ${LOG_WARNING}./winetricks.log${LOG_RESET}."
   print_log "Executing winetricks."
   print_log "Downloading and installing core components for wine prefix. This could take some time."
-  
+
   local tricks_args
-  if [[ "$OS_ID" == "redos" ]]; then
+  if [[ $OS_ID == "redos"   ]]; then
     tricks_args=(corefonts win10 vkd3d msxml3 msxml6 gdiplus)
   else
     tricks_args=(corefonts win10 vkd3d dxvk2030 msxml3 msxml6 gdiplus)
@@ -375,7 +375,7 @@ install_photoshop() {
   else
     print_log "Using local Photoshop archive."
 
-    if [[ ! $LOCAL_ARCHIVE == *.tar.xz ]]; then
+    if [[ $LOCAL_ARCHIVE != *.tar.xz   ]]; then
       print_error "Only tar.xz is accepted for now."
       exit 1
       # TODO:
@@ -407,7 +407,7 @@ install_photoshop() {
   fi
 }
 
-INSTALLED_DESKTOP_FILE=${XDG_DATA_HOME}/applications/photoshop.desktop
+DESKTOP_FILE=${XDG_DATA_HOME}/applications/photoshop.desktop
 install_icon() {
   # Papirus Icon Theme already has a Photoshop icon in it.
   # The script will check if you have Papirus installed and use its icon. If Papirus is not installed, the script will download the icon from the Internet and use it.
@@ -438,13 +438,22 @@ install_icon() {
   fi
 
   print_log "Adding icon '${ICON}' to .desktop file"
-  echo "Icon=${ICON}" >> "${INSTALLED_DESKTOP_FILE}"
 }
 
 install_desktop_entry() {
   mkdir "$XDG_DATA_HOME/applications" -p
-  cp ./photoshop.desktop "${INSTALLED_DESKTOP_FILE}"
-  echo "Exec=bash $HOME/.local/bin/photoshop.sh %F" >> "${INSTALLED_DESKTOP_FILE}"
+  {
+    echo "[Desktop Entry]"
+    echo "Name=Photoshop"
+    echo "Type=Application"
+    echo "Terminal=false"
+    echo "Comment=The industry-standard photo editing software (Wine)"
+    echo "Categories=Graphics"
+    echo "MimeType=image/psd;image/x-psd;image/png;image/jpg;image/jpeg;image/webp;image/heif;image/raw"
+    echo "StartupWMClass=photoshop.exe"
+    echo "Exec=bash $HOME/.local/bin/photoshop.sh %F"
+    echo "Icon=${ICON}"
+  } > "${DESKTOP_FILE}"
 }
 
 install_launcher() {
