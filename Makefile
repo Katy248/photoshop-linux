@@ -13,3 +13,4 @@ fmt:
 
 clear:
 	rm -f ./install_log.log ./Photoshop.tar.xz
+	rm -rf /tmp/photoshop-linux/
