@@ -194,11 +194,11 @@ install_deps() {
 #
 
 is_path_exists() {
-  if ! [ -d "$1" ]; then
+  local path=$1
+  if ! [ -d "$path" ]; then
     return
   fi
-  # BUG
-  # echo -e "$WARNING The specified path '$1' already exists."
+
   print_warn "The specified path already exists."
 
   local delete_installation
@@ -206,7 +206,7 @@ is_path_exists() {
 
   # TODO: Need to test, this seems doesn't work
   if [[ ${delete_installation} != 0  ]]; then
-    if rm -rf "${1:?}"; then
+    if rm -rf "${path:?}"; then
       print_log "Deleted old installation."
     else
       print_error "Something went wrong."
@@ -316,36 +316,6 @@ download_photoshop() {
   # 				;;
   # 		esac
   # 	done
-}
-
-verify_path() {
-  local path="$1"
-
-  # Check the validity of the path if the user has specified the absolute path manually. This is necessary in case the user accidentally misspells $HOME paths.
-  # https://github.com/shvedes/photoshop-linux/issues/1
-  if [[ ! $path =~ $HOME  ]]; then
-    print_error "Cannot validade ${YELLOW}\$HOME${RESET} path."
-    exit 1
-  fi
-
-  # Fix trailing slashes if needed
-  path="$(echo "$path" | sed 's/\/\+$//')"
-  INSTALL_PATH="$path"
-
-  # Remove the last folder from the given path (as it will be created by wineprefix) and check the remaining path for validity.
-  local reformatted_path
-  reformatted_path="$(echo "$path" | sed 's/\/[^\/]*$//')"
-
-  if [ -d "$reformatted_path" ]; then
-    if [[ $reformatted_path == "$HOME" ]]; then
-      return 0
-    else
-      print_check "Directory '${reformatted_path}' exist."
-    fi
-  else
-    print_error "Path '${reformatted_path}' does not exist!"
-    exit 1
-  fi
 }
 
 # TODO:
@@ -477,7 +447,6 @@ install_launcher() {
 main() {
   install_deps
 
-  verify_path "$INSTALL_PATH"
   is_path_exists "$INSTALL_PATH"
   setup_wine
 
@@ -510,7 +479,7 @@ while getopts "a:i:hs-:" flag; do
     exit 0
     ;;
   i)
-    INSTALL_PATH="$OPTARG"
+    INSTALL_PATH=$(eval echo "$OPTARG")
     ;;
   s)
     print_log "Skip checksums validation enabled"
