@@ -145,10 +145,9 @@ redos)
   DEPENDENCIES=(
     curl
     wine
+    winetricks
     ImageMagick
     zstd
-    git
-    make
   )
   ;;
 *)
@@ -180,10 +179,6 @@ install_deps() {
     if ! sudo dnf install -y "${DEPENDENCIES[@]}" --comment "Installed from photoshop-linux script"; then
       print_error "DNF terminated with an error"
       exit 1
-    fi
-
-    if ! ./install-winetricks.sh "${TMP_DIR}/winetricks"; then
-      print_error "Error while installing winetricks"
     fi
     ;;
   *)
@@ -230,8 +225,15 @@ setup_wine() {
   # echo -e "${LOG_NORMAL}[LOG]${LOG_RESET} Executing winetricks. All winetricks logs are saved in ${LOG_WARNING}./winetricks.log${LOG_RESET}."
   print_log "Executing winetricks."
   print_log "Downloading and installing core components for wine prefix. This could take some time."
+  
+  local tricks_args
+  if [[ "$OS_ID" == "redos" ]]; then
+    tricks_args=(corefonts win10 vkd3d msxml3 msxml6 gdiplus)
+  else
+    tricks_args=(corefonts win10 vkd3d dxvk2030 msxml3 msxml6 gdiplus)
+  fi
 
-  if ! winetricks --unattended corefonts win10 vkd3d dxvk2030 msxml3 msxml6 gdiplus &> ./install_log.log; then
+  if ! winetricks --unattended "${tricks_args[@]}" &> ./install_log.log; then
     print_error "Winetricks terminated with an error."
     print_error "Please open an issue by mentioning the contents of ${YELLOW}./install_log.log${RESET}."
     exit 1
