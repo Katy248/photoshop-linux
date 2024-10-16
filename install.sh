@@ -80,10 +80,10 @@ on_interrupt() {
 
 get_help() {
   echo "Usage:"
-  echo "  ./install.sh [options...] <absolute path>"
+  echo "  ./install.sh [options...]"
   echo "Options:"
-  echo "  -a          Use already existing Photoshop.tar.xz"
-  echo "  -i          Install Photoshop"
+  echo "  -a ARCHIVE  Use already existing Photoshop.tar.xz"
+  echo "  -i PREFIX   Install Photoshop"
   echo "  -s          Skip checksums validation"
   echo "  -h, --help  Show this help"
 }
